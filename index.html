@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repair Check-in</title>
+<meta name="description" content="A repair counter check-in: device, issue, pre-repair condition, estimate and a printable receipt.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand"><span class="mark" aria-hidden="true">RC</span><div><b>Repair Check-in</b><span class="sub">Demo · data stays in this browser</span></div></div>
+    <nav class="tabs" aria-label="Views">
+      <button type="button" class="tab" data-view="new" aria-current="page">New check-in</button>
+      <button type="button" class="tab" data-view="queue">Queue <span class="count" id="queue-count">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- New check-in -->
+  <section id="view-new" class="view" aria-labelledby="new-h">
+    <div class="head-row">
+      <h1 id="new-h">New check-in <span class="ticket-no" id="ticket-no"></span></h1>
+      <button type="button" class="btn ghost" id="fill-sample">Fill with sample</button>
+    </div>
+
+    <form id="form" novalidate>
+      <fieldset class="card">
+        <legend>Customer</legend>
+        <div class="grid">
+          <label>Name<input name="name" autocomplete="off" required></label>
+          <label>Phone<input name="phone" type="tel" inputmode="tel" autocomplete="off" required></label>
+          <label class="span2">Email <span class="opt">(optional)</span><input name="email" type="email" autocomplete="off"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>Device</legend>
+        <div class="grid">
+          <label>Type
+            <select name="type" required>
+              <option value="">Choose…</option>
+              <option>Phone</option><option>Tablet</option><option>Laptop</option><option>Game console</option><option>Other</option>
+            </select>
+          </label>
+          <label>Brand and model<input name="model" placeholder="e.g. Pixel 8, iPad Air 5" required></label>
+          <label class="span2">Serial or IMEI <span class="opt">(optional)</span><input name="serial" autocomplete="off"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>What's wrong</legend>
+        <div class="chips" role="group" aria-label="Common issues">
+          <button type="button" class="chip" data-issue="Cracked screen">Cracked screen</button>
+          <button type="button" class="chip" data-issue="Battery drains fast">Battery</button>
+          <button type="button" class="chip" data-issue="Won't charge">Won't charge</button>
+          <button type="button" class="chip" data-issue="Liquid damage">Liquid damage</button>
+          <button type="button" class="chip" data-issue="No power">No power</button>
+          <button type="button" class="chip" data-issue="Overheating">Overheating</button>
+        </div>
+        <label>Customer's description<textarea name="issue" rows="3" required placeholder="In the customer's words: what happened, when it started"></textarea></label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>Condition before repair</legend>
+        <p class="hint">Check each one with the customer at the counter. It protects both of you.</p>
+        <div class="cond" id="cond"></div>
+        <label>Accessories left with the device
+          <input name="accessories" placeholder="e.g. case, charger, SIM tray">
+        </label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>Passcode</legend>
+        <p class="hint">Never write a passcode on a ticket. Choose how testing will work.</p>
+        <div class="radios" role="radiogroup" aria-label="Passcode handling">
+          <label class="radio"><input type="radio" name="passcode" value="Customer will unlock when contacted" required> Customer will unlock when contacted</label>
+          <label class="radio"><input type="radio" name="passcode" value="No passcode set"> No passcode set</label>
+          <label class="radio"><input type="radio" name="passcode" value="Repair only, no testing past lock screen"> Repair only, no testing past the lock screen</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>Estimate</legend>
+        <div class="grid three">
+          <label>Estimate ($)<input name="estimate" type="number" min="0" step="1" inputmode="numeric" required></label>
+          <label>Deposit ($)<input name="deposit" type="number" min="0" step="1" inputmode="numeric" value="0"></label>
+          <label>Promised by<input name="due" type="date" required></label>
+        </div>
+        <label class="check"><input type="checkbox" name="consent" required> Customer agreed to the estimate and repair terms</label>
+      </fieldset>
+
+      <div class="errors" id="errors" role="alert" hidden></div>
+      <div class="actions">
+        <button type="reset" class="btn ghost">Clear</button>
+        <button type="submit" class="btn primary">Check in and print receipt</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Queue -->
+  <section id="view-queue" class="view" aria-labelledby="queue-h" hidden>
+    <div class="head-row">
+      <h1 id="queue-h">Repair queue</h1>
+      <label class="search"><span class="sr">Search tickets</span><input id="search" type="search" placeholder="Search name, device, ticket…"></label>
+    </div>
+    <div id="queue" class="queue"></div>
+  </section>
+
+  <!-- Receipt -->
+  <section id="view-receipt" class="view" aria-labelledby="receipt-h" hidden>
+    <div class="head-row no-print">
+      <h1 id="receipt-h">Receipt</h1>
+      <div class="actions"><button type="button" class="btn ghost" id="back">Back</button><button type="button" class="btn primary" id="print">Print</button></div>
+    </div>
+    <article id="receipt" class="receipt"></article>
+  </section>
+</main>
+
+<footer class="wrap foot no-print">Demo by <a href="https://github.com/pMacadoo">Paul McDaniel</a>. All names and devices are invented. Nothing leaves your browser.</footer>
+<script src="app.js"></script>
+</body>
+</html>
